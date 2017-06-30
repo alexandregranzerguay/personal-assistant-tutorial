@@ -2,19 +2,23 @@ var express = require('express');
 var app = express();
 var cfenv = require('cfenv');
 var bodyParser = require('body-parser');
-var ConversationV1 = require('watson-developer-cloud/conversation/v1');
+var Conversation = require('watson-developer-cloud/conversation/v1');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var prompt = require('prompt-sync')();
+var readlineSync = require('readline-sync');
 
-var conversation = new ConversationV1({
+var conversation = new Conversation({
   username: '43aa283f-6724-4c7a-87ca-66e89ccf6dfb', // replace with username from service key
   password: 'DMjjbGuXdNeq', // replace with password from service key
-  path: { workspace_id: 'WORKSPACE ID' }, // replace with workspace ID
+  path: { workspace_id: '234e6479-013f-4ca0-8402-bdc90b7f31df' }, // replace with workspace ID
   version_date: '2016-07-11'
 });
 
 app.use(express.static('public'));
+app.use(bodyParser.json());
+
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/public/index.htm')
+  res.sendFile(__dirname + '/client/index.html')
 })
 
 app.get('/answer', function(req, res){
@@ -22,24 +26,77 @@ app.get('/answer', function(req, res){
       message:req.query.message
     };
     // Start conversation with empty message.
-    conversation.message({}, processResponse);
+    conversation.message({}, processResponse(response));
     console.log(response)
-    res.sendFile(__dirname + '/public/answer.htm')
-    res.end(JSON.stringify(response))
+    // res.sendFile(__dirname + '/client/views/answer.html')
+    res.send(JSON.stringify(response))
 })
 
-// Process the conversation response.
-function processResponse(err, response) {
-  if (err) {
-    console.error(err); // something went wrong
-    return;
-  }
+app.post('/api/message', function(req,res){
+  var payload = {
+    context: req.body.context || {},
+    input: req.body.input || {}
+  };
 
-  // Display the output from dialog, if any.
-  if (response.output.text.length != 0) {
-      console.log(response.output.text[0]);
+  //send user message to watson
+  conversation.message(payload, function(err, data) {
+    if (err) {
+      return res.status(err.code || 500).json(err);
+    }
+    return res.json(updateMessage(payload, data));
+  });
+});
+function updateMessage(input, response) {
+  var responseText = null;
+  if (!response.output) {
+    response.output = {};
+  } else {
+    return response;
   }
+  // if (response.intents && response.intents[0]) {
+  //   var intent = response.intents[0];
+  //   // Depending on the confidence of the response the app can return different messages.
+  //   // The confidence will vary depending on how well the system is trained. The service will always try to assign
+  //   // a class/intent to the input. If the confidence is low, then it suggests the service is unsure of the
+  //   // user's intent . In these cases it is usually best to return a disambiguation message
+  //   // ('I did not understand your intent, please rephrase your question', etc..)
+  //   if (intent.confidence >= 0.75) {
+  //     responseText = 'I understood your intent was ' + intent.intent;
+  //   } else if (intent.confidence >= 0.5) {
+  //     responseText = 'I think your intent was ' + intent.intent;
+  //   } else {
+  //     responseText = 'I did not understand your intent';
+  //   }
+  // }
+  response.output.text = responseText;
+  return response;
 }
+
+//
+// // Process the conversation response.
+// function processResponse(res, err) {
+//   if (err) {
+//     console.error(err); // something went wrong
+//     return;
+//   }
+//   // If an intent was detected, log it out to the console.
+//   if (response.intents.length > 0) {
+//     console.log('Detected intent: #' + response.intents[0].intent);
+//   }
+//
+//   // Display the output from dialog, if any.
+//   if (response.output.text.length != 0) {
+//       console.log(response.output.text[0]);
+//   }
+//
+//   // Prompt for the next round of input.
+//   // If your node is using cmd change readlineSync to prompt
+//   // var newMessageFromUser = readlineSync.question('>> ');
+//   conversation.message({
+//       input: { text: res },
+//       context : response.context,
+//     }, processResponse)
+// }
 
 var server = app.listen(3000, function(){
   var host = server.address().address
