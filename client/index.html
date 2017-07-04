@@ -8,14 +8,16 @@
 </head>
   <body>
     <h1>Hello World</h1>
-    <form action = "http://127.0.0.1:3000/" method = "GET">
+    <form action = "http://127.0.0.1:3000/answer" method = "GET">
              message: <input type = "text" name = "message">
              <input type = "submit" value = "Submit">
     </form>
     <div class="container">
     	<div class="row">
-    		<div class="col-md-12">
-    			<div ng-view>{{mika.answer}}</div>
+    		<div class="col-md-12" ng-controller="mikaController">
+          <div>
+            <p>Mika :<span>{{mika}}</span></p>
+          </div>
     		</div>
     	</div>
      </div>

@@ -1,10 +1,10 @@
 var myApp = angular.module('myApp');
 
-myApp.controller("mikaController", ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams){
+myApp.controller("mikaController", function($scope, $http, $location, $routeParams){
   console.log('messaging loaded')
-  $scope.getAnswer = function(){
-    $http.post('/answer').success(function(response){
+    $http.get('/answer').success(function(response){
+      console.log('Asking Server for Answer')
       $scope.mika = response;
-    })
-  }
-}]);
+    });
+    // $http.post('/someUrl', data, config).then(successCallback, errorCallback);
+});
