@@ -1,31 +1,31 @@
 <html ng-app="myApp">
 <head>
   <title>homepage</title>
-  <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js">
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-  </script>
-  <link rel="stylesheet" href="css/style.css">
+  <!-- <script type="text/javascript" src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.js"></script> -->
+  <link type="text/css" rel="stylesheet" href="/client/bower_components/bootstrap/dist/css/bootstrap.css">
+  <link type="text/css" rel="stylesheet" href="/client/css/style.css">
 </head>
   <body>
+    <!-- <ng-view></ng-view> -->
     <h1>Hello World</h1>
-    <form action = "http://127.0.0.1:3000/answer" method = "GET">
-             message: <input type = "text" name = "message">
-             <input type = "submit" value = "Submit">
-    </form>
+
     <div class="container">
     	<div class="row">
     		<div class="col-md-12" ng-controller="mikaController">
           <div>
-            <p>Mika :<span>{{mika}}</span></p>
+            <form>
+                     message: <input type = "text" name = "message" ng-model="question">
+                     <button class="btn btn-primary btn-lg" type = "submit" ng-click="askMika()"> Send </button>
+            </form>
+            <p>{{ mika }}</p>
           </div>
     		</div>
     	</div>
      </div>
-    <script src="/node_modules/jquery/dist/jquery.js"></script>
-	<script src="/node_modules/angular/angular.js"></script>
-	<script src="/node_modules/angular-route/angular-route.js"></script>
-	<script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="/app.js"></script>
-	<script src="/controllers/mikaController.js"></script>
+     <script type="text/javascript" src= "/client/node_modules/angular/angular.js" ></script>
+     <script type="text/javascript" src= "/client/node_modules/angular-route/angular-route.js" ></script>
+     <script type="text/javascript" src= "/client/app.js" ></script>
+    <script src="/client/node_modules/jquery/dist/jquery.js"></script>
+	<script src="/client/bower_components/bootstrap/dist/js/bootstrap.js"></script>
   </body>
 </html>
