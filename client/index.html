@@ -14,7 +14,7 @@
     		<div class="col-md-12" ng-controller="mikaController">
           <div>
             <form>
-                     message: <input type = "text" name = "message" ng-model="question">
+                     message: <input type = "text/html" name = "message" ng-model="question">
                      <button class="btn btn-primary btn-lg" type = "submit" ng-click="askMika()"> Send </button>
             </form>
             <p>{{ mika }}</p>

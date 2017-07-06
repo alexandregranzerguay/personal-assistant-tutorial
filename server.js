@@ -31,7 +31,7 @@ app.get('*', function(req, res){
   res.sendFile(__dirname + '/client/index.html')
 })
 
-app.get('/api/answer', function(req, res){
+app.get('/api/answer', bodyParser.json(), function(req, res){
   console.log('entered request')
     msg={
       message:req.body
@@ -62,10 +62,10 @@ app.post('/api/answer', function(req, res){
         console.log('error:', err)
       }
       else {
-        response.output.text[0].replace(/"/g, '')
-        console.log(JSON.stringify(response.output.text[0]))
+        answer = response.output.text[0].replace(/\"/g, '')
+        console.log(answer)
         var context = response.context;
-        res.send(JSON.stringify(response.output.text[0]))
+        res.send(answer)
       }
     });
 })
