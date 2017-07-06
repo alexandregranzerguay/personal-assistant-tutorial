@@ -13,7 +13,7 @@ var conversation = new Conversation({
   path: { workspace_id: '234e6479-013f-4ca0-8402-bdc90b7f31df' }, // replace with workspace ID
   version_date: '2016-07-11'
 });
-var context = {};
+var context;
 // Get our API routes
 // var api = require('./client/app');
 app.use(express.static('public'));
@@ -55,25 +55,23 @@ app.post('/api/answer', function(req, res){
     msg = {
       text:req.body.question
     };
-    // Start conversation with empty message.
-    console.log(msg.message)
-    conversation.message({ input: msg , 'context':context}, function(err, response){
+    conversation.message({ input: msg , context: context}, function(err, response){
       if (err) {
         console.log(msg)
         console.log('error:', err)
       }
       else {
         count += 1;
-        console.log(response)
+        console.log(count);
         if(response.output.text[0]){
           answer = response.output.text[0].replace(/\"/g, '');
-          console.log(answer);
-          var context = response.context;
+          context = response.context;
           console.log(response.context);
-          console.log(count);
           res.send(answer);
         }
         else{
+          console.log(context)
+          console.log(response)
           console.log('mika has no answer')
         }
       }
