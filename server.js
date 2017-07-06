@@ -3,7 +3,7 @@ var app = express();
 var cfenv = require('cfenv');
 var bodyParser = require('body-parser');
 var Conversation = require('watson-developer-cloud/conversation/v1');
-var urlencodedParser = bodyParser.urlencoded({ 'extended': false })
+
 var prompt = require('prompt-sync')();
 var readlineSync = require('readline-sync');
 
@@ -17,6 +17,7 @@ var context = {};
 // Get our API routes
 // var api = require('./client/app');
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/client', express.static(__dirname + '/client'));
 app.use('/controllers', express.static(__dirname + '/client/controllers'));
@@ -49,23 +50,32 @@ app.get('/api/answer', bodyParser.json(), function(req, res){
       }
     });
 })
-
+var count=0;
 app.post('/api/answer', function(req, res){
-    msg={
-      message:req.query.message
+    msg = {
+      text:req.body.question
     };
     // Start conversation with empty message.
     console.log(msg.message)
-    conversation.message({'input': msg , 'context':context}, function(err, response){
+    conversation.message({ input: msg , 'context':context}, function(err, response){
       if (err) {
         console.log(msg)
         console.log('error:', err)
       }
       else {
-        answer = response.output.text[0].replace(/\"/g, '')
-        console.log(answer)
-        var context = response.context;
-        res.send(answer)
+        count += 1;
+        console.log(response)
+        if(response.output.text[0]){
+          answer = response.output.text[0].replace(/\"/g, '');
+          console.log(answer);
+          var context = response.context;
+          console.log(response.context);
+          console.log(count);
+          res.send(answer);
+        }
+        else{
+          console.log('mika has no answer')
+        }
       }
     });
 })
