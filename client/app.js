@@ -19,11 +19,11 @@ var myApp = angular.module("myApp", []);
 //   //   redirectTo: '/'
 //   // });
 // }]);
-
+var el = angular.element("#myConversation");
+var count = 0;
 myApp.controller("mikaController",['$scope', '$http', function($scope, $http){
   console.log('messaging loaded')
-  // $scope.mika = { answer: 'Test' };
-
+  // $scope.mika = { answer: 'Test' }
   $scope.askMika = function() {
     console.log('send button was pressed')
     console.log($scope.question)
@@ -40,6 +40,7 @@ myApp.controller("mikaController",['$scope', '$http', function($scope, $http){
         console.log('Got answer')
         console.log(response)
         // $scope.mika = { answer: response };
+        el.append(compile('<p>{{ mika }}</p>'));
         $scope.mika = response.data;
       }, function errorCallback(error){
         console.log('got call back')

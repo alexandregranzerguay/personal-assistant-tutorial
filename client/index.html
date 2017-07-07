@@ -17,11 +17,12 @@
                      message: <input type = "text/html" name = "message" ng-model="question">
                      <button class="btn btn-primary btn-lg" type = "submit" ng-click="askMika()"> Send </button>
             </form>
-            <p>{{ mika }}</p>
+            <p id = "myConversation">{{ mika }}</p>
           </div>
     		</div>
     	</div>
      </div>
+     <script type="text/javascript" src= "/client/node_modules/jquery/dist/jquery.js" ></script>
      <script type="text/javascript" src= "/client/node_modules/angular/angular.js" ></script>
      <script type="text/javascript" src= "/client/node_modules/angular-route/angular-route.js" ></script>
      <script type="text/javascript" src= "/client/app.js" ></script>
