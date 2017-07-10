@@ -107,23 +107,9 @@ app.post('/api/answer', function(req, res){
                 }
               ]
             });
-            id2 = conversation.convos[0]._id
-            convo_id = conversation._id
-            console.log(id2);
-            console.log(conversation.convos[0].el);
-
-            // conversation.update({_id : id}, {'$set': {
-            //   'convos.$.el' : msg.text }}, (err, result) => {
-            //     if(err){
-            //       console.log(err);
-            //     } else {
-            //       console.log(result);
-            //     }
-            //   }
-            // );
+            console.log(conversation);
           } else{
             // Add user question to conversation db
-            console.log('conversation id:', convo_id);
             console.log('\n', '\n');
             console.log('Storing question:');
             var convo_instance = {
@@ -132,21 +118,33 @@ app.post('/api/answer', function(req, res){
             console.log('what is being added:', convo_instance)
             conversation.convos.push(convo_instance);
             conversation.save(
-            // conversation.update({ _id : convo_id}, {$push: {
-            //   convos : convo_instance }},
               function(err, result){
                 if(err){
                   console.log('error from mongoose')
                   console.log(err);
                 } else {
                   console.log('message to be stored:', msg.text)
-                  console.log(result);
                   console.log(conversation);
                 }
               }
             );
           }
           // Add Mika answer to conversation db
+          var answer_instance = {
+            el: answer
+          };
+          conversation.convos.push(answer_instance);
+          conversation.save(
+            function(err, result){
+              if(err){
+                console.log('error from mongoose')
+                console.log(err);
+              } else {
+                console.log('message to be stored:', msg.text)
+                console.log(conversation);
+              }
+            }
+          );
           // console.log('\n', '\n');
           // console.log('Storing answer:');
           // conversation.update({'convos._id': id}, {'$push':{
@@ -165,6 +163,7 @@ app.post('/api/answer', function(req, res){
           console.log('mika has no answer')
         }
         count += 1;
+        res.json(conversation)
       }
     });
 })
