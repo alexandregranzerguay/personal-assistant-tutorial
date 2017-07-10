@@ -22,14 +22,14 @@ var myApp = angular.module("myApp", []);
 var el = angular.element("#myConversation");
 var count = 0;
 myApp.controller("mikaController",['$scope', '$http', function($scope, $http){
-  console.log('messaging loaded')
+  console.log('messaging loaded');
   // $scope.mika = { answer: 'Test' }
   $scope.askMika = function() {
-    console.log('send button was pressed')
-    console.log($scope.question)
+    console.log('send button was pressed');
+    console.log($scope.question);
     // var question = $scope.question.toJSON();
     var question2 = JSON.stringify($scope.question);
-    console.log(question2)
+    console.log(question2);
     $http({
       method: 'POST',
       url: '/api/answer',
@@ -37,13 +37,13 @@ myApp.controller("mikaController",['$scope', '$http', function($scope, $http){
       // config: 'text/html'
       headers : { 'Content-type': 'application/json'}
     }).then(function successCallback(response){
-        console.log('Got answer')
-        console.log(response)
+        console.log('Got answer');
+        console.log(response);
         // $scope.mika = { answer: response };
         el.append(compile('<p>{{ mika }}</p>'));
-        $scope.mika = response.data;
+        $scope.mika = response.convos;
       }, function errorCallback(error){
-        console.log('got call back')
+        console.log('got call back');
         console.log(error);
       });
   };

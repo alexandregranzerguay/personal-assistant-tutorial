@@ -9,28 +9,18 @@
  -webkit-box-shadow:none;
  border-color:#cccccc;
 }
-.form-control{width:20%}
-.navbar-nav > li > a {
-  border-right: 1px solid #ddd;
-  padding-bottom: 15px;
-  padding-top: 15px;
-}
 
-.input-group{
-      padding: 10px;
-      width: 40%;
-  }
 
-  .center-block() {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
 
   .container {
-    width: 940px;
-    .center-block();
+    padding: 20px;
+
+
   }
+
+body {
+  background-color: #64676b;
+}
 
 .table {
     text-align: center;
@@ -39,3 +29,19 @@
     }
 
 .navbar-nav:last-child{ border-right:0}
+
+#chat {
+  border-radius: 10px     10px      0           0;
+  min-height: 500px;
+  width: 500px;
+  margin: auto;
+  padding-bottom: 0px;
+  background-color: #f2f4f7;
+
+}
+
+#typeMessage {
+  width: 500px;
+  margin: auto;
+  padding-top: 0px;
+}

@@ -54,11 +54,11 @@ var conversation;
 var count=0;
 
 app.get('*', function(req, res){
-  res.sendFile(__dirname + '/client/index.html')
+  res.sendFile(__dirname + '/client/index.html');
 })
 
 app.get('/api/answer', bodyParser.json(), function(req, res){
-  console.log('entered request')
+  console.log('entered request');
     msg={
       message:req.body
     };
@@ -66,12 +66,12 @@ app.get('/api/answer', bodyParser.json(), function(req, res){
     console.log(msg.message)
     conversationWatson.message({'input': msg , 'context':context}, function(err, response){
       if (err) {
-        console.log('error:', err)
+        console.log('error:', err);
       }
       else {
-        console.log(JSON.stringify(response.output.text[0]))
+        console.log(JSON.stringify(response.output.text[0]));
         var context = response.context;
-        res.json(response.output.text[0])
+        res.json(response.output.text[0]);
       }
     });
 })
@@ -83,9 +83,9 @@ app.post('/api/answer', function(req, res){
     };
     conversationWatson.message({ input: msg , context: context}, function(err, response){
       if (err) {
-        console.log('Error from watson')
-        console.log(msg)
-        console.log('error:', err)
+        console.log('Error from watson');
+        console.log(msg);
+        console.log('error:', err);
       }
       else {
         console.log(count);
@@ -115,15 +115,15 @@ app.post('/api/answer', function(req, res){
             var convo_instance = {
               el: msg.text
             };
-            console.log('what is being added:', convo_instance)
+            console.log('what is being added:', convo_instance);
             conversation.convos.push(convo_instance);
             conversation.save(
               function(err, result){
                 if(err){
-                  console.log('error from mongoose')
+                  console.log('error from mongoose');
                   console.log(err);
                 } else {
-                  console.log('message to be stored:', msg.text)
+                  console.log('message to be stored:', msg.text);
                   console.log(conversation);
                 }
               }
@@ -137,10 +137,10 @@ app.post('/api/answer', function(req, res){
           conversation.save(
             function(err, result){
               if(err){
-                console.log('error from mongoose')
+                console.log('error from mongoose');
                 console.log(err);
               } else {
-                console.log('message to be stored:', msg.text)
+                console.log('message to be stored:', answer_instance);
                 console.log(conversation);
               }
             }
@@ -158,12 +158,12 @@ app.post('/api/answer', function(req, res){
           //   }
           // );
         } else{
-          console.log(context)
-          console.log(response)
-          console.log('mika has no answer')
+          console.log(context);
+          console.log(response);
+          console.log('mika has no answer');
         }
         count += 1;
-        res.json(conversation)
+        res.json(conversation);
       }
     });
 })
