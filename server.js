@@ -2,31 +2,56 @@ var express = require('express');
 var app = express();
 var cfenv = require('cfenv');
 var bodyParser = require('body-parser');
-var Conversation = require('watson-developer-cloud/conversation/v1');
-
+var ConversationW = require('watson-developer-cloud/conversation/v1');
+var mongoose = require('mongoose');
+var morgan = require('morgan');
 var prompt = require('prompt-sync')();
 var readlineSync = require('readline-sync');
 
-var conversation = new Conversation({
+var conversationWatson = new ConversationW({
   username: '43aa283f-6724-4c7a-87ca-66e89ccf6dfb', // replace with username from service key
   password: 'DMjjbGuXdNeq', // replace with password from service key
   path: { workspace_id: '234e6479-013f-4ca0-8402-bdc90b7f31df' }, // replace with workspace ID
   version_date: '2016-07-11'
 });
 var context;
+var uristringonline = 'mongodb://mika:MO5OssxZBz1ONTIV@personal-assistant-shard-00-00-jba4j.mongodb.net:27017,personal-assistant-shard-00-01-jba4j.mongodb.net:27017,personal-assistant-shard-00-02-jba4j.mongodb.net:27017/admin?ssl=true&replicaSet=personal-assistant-shard-0&authSource=admin';
+var uristring = 'localhost:27017/mydb'
+// Connect to mongodb
+mongoose.connect(uristring, function (err, res) {
+      if (err) {
+      console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+      } else {
+      console.log ('Succeeded connected to: ' + uristring);
+      }
+    });
 // Get our API routes
 // var api = require('./client/app');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(morgan('dev'));
 app.use('/client', express.static(__dirname + '/client'));
 app.use('/controllers', express.static(__dirname + '/client/controllers'));
 app.use('/css', express.static(__dirname + '/client/css'));
-app.use('/angular', express.static(__dirname + '/client/bower_components/angular'));
-app.use('/angular-route', express.static(__dirname + '/client/bower_components/angular-route'));
-app.use('/jquery', express.static(__dirname + '/client/bower_components/jquery'));
+app.use('/angular', express.static(__dirname + '/client/node_modules/angular'));
+app.use('/angular-route', express.static(__dirname + '/client/node_modules/angular-route'));
+app.use('/jquery', express.static(__dirname + '/client/node_modules/jquery'));
 app.use('/bootstrap', express.static(__dirname + '/client/bower_components/bootstrap'));
-// app.use('/answer', api)
+
+//Schema for mongodb
+var conversationSchema = new mongoose.Schema({
+  _id : String, // check how mongoose handles id
+  convos:[
+    {
+      el: String
+    }
+  ]
+});
+
+var conversationModel = mongoose.model('Conversation', conversationSchema);
+var conversation;
+var count=0;
 
 app.get('*', function(req, res){
   res.sendFile(__dirname + '/client/index.html')
@@ -39,7 +64,7 @@ app.get('/api/answer', bodyParser.json(), function(req, res){
     };
     // Start conversation with empty message.
     console.log(msg.message)
-    conversation.message({'input': msg , 'context':context}, function(err, response){
+    conversationWatson.message({'input': msg , 'context':context}, function(err, response){
       if (err) {
         console.log('error:', err)
       }
@@ -50,30 +75,95 @@ app.get('/api/answer', bodyParser.json(), function(req, res){
       }
     });
 })
-var count=0;
+
+
 app.post('/api/answer', function(req, res){
     msg = {
       text:req.body.question
     };
-    conversation.message({ input: msg , context: context}, function(err, response){
+    conversationWatson.message({ input: msg , context: context}, function(err, response){
       if (err) {
+        console.log('Error from watson')
         console.log(msg)
         console.log('error:', err)
       }
       else {
-        count += 1;
         console.log(count);
         if(response.output.text[0]){
           answer = response.output.text[0].replace(/\"/g, '');
           context = response.context;
-          console.log(response.context);
-          res.send(answer);
-        }
-        else{
+          id = response.context.conversation_id;
+          console.log('Current conversation id: ', id);
+          console.log('Current Context : ',context.conversation_id);
+          if(count==0){
+            // Store first user question in conversation db
+            console.log('\n', '\n');
+            console.log('Storing first question:');
+            conversation = new conversationModel({
+              _id : id,
+              convos:[
+                {
+                  el: msg.text
+                }
+              ]
+            });
+            console.log(conversation);
+          } else{
+            // Add user question to conversation db
+            console.log('\n', '\n');
+            console.log('Storing question:');
+            var convo_instance = {
+              el: msg.text
+            };
+            console.log('what is being added:', convo_instance)
+            conversation.convos.push(convo_instance);
+            conversation.save(
+              function(err, result){
+                if(err){
+                  console.log('error from mongoose')
+                  console.log(err);
+                } else {
+                  console.log('message to be stored:', msg.text)
+                  console.log(conversation);
+                }
+              }
+            );
+          }
+          // Add Mika answer to conversation db
+          var answer_instance = {
+            el: answer
+          };
+          conversation.convos.push(answer_instance);
+          conversation.save(
+            function(err, result){
+              if(err){
+                console.log('error from mongoose')
+                console.log(err);
+              } else {
+                console.log('message to be stored:', msg.text)
+                console.log(conversation);
+              }
+            }
+          );
+          // console.log('\n', '\n');
+          // console.log('Storing answer:');
+          // conversation.update({'convos._id': id}, {'$push':{
+          //   'convos.$.el' : answer }}, (err, result) => {
+          //     if(err){
+          //       console.log(err);
+          //     } else {
+          //       res.json(result);
+          //       console.log(result);
+          //     }
+          //   }
+          // );
+        } else{
           console.log(context)
           console.log(response)
           console.log('mika has no answer')
         }
+        count += 1;
+        res.json(conversation)
       }
     });
 })
