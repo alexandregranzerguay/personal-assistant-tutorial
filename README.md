@@ -2,15 +2,18 @@
 ---
 # Mika
 Today you will learn how to create your own personal assistant using Node.js as well as three Watson APIs: Speech-to-Text, Conversation and Text-to-Speech
+*Note: This Installation Guide is intended for Linux system and has only been tested on Ubuntu 16.04. Please comment any issues under other platforms. Thanks!*
 ## Table Of Contents
-[Add links to different sections]
++ [Requirements](#Requirements)
++ [Installation](#Installation)
++ [Personalizing The Conversation Api](#Personalizing-The-Conversation-Api)
++ [Requirements](#Starting-Your-Assistant)
 ## Requirements
 + [Bluemix account](https://console.ng.bluemix.net/registration/)
 + [CLI](https://github.com/cloudfoundry/cli#downloads)
 + [Node](https://nodejs.org/en/)
 + Git
 + Text Editor
-
 ## Installation
 Clone the following repo
 ```sh
@@ -57,7 +60,13 @@ Leave client directory
 ```sh
 cd ..
 ```
-## Personalizing The Source Code
+### Installing MongoDb
+Follow the first two steps from the following guide:
+[MongoDB Installation on Ubuntu 16.04](https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04)
+
+## Personalizing The Conversation Api
+See the documentation below for all the details on how to edit the conversation api to customize it to your needs:
+[Watson Conversation Documentation](https://www.ibm.com/watson/developercloud/doc/conversation/configure-workspace.html)
 
 ## Starting Your Assistant
 Install nodemon (this package will check for changes in your server.js code and restart the server automatically on saved changes instances)
@@ -68,4 +77,11 @@ Run the server locally using nodemon
 ```sh
 nodemon
 ```
+In your browser navigate to:
+```sh
+localhost:3000
+```
+Enjoy!
+
+
 
