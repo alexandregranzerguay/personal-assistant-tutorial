@@ -4,10 +4,10 @@
 Today you will learn how to create your own personal assistant using Node.js as well as three Watson APIs: Speech-to-Text, Conversation and Text-to-Speech
 *Note: This Installation Guide is intended for Linux system and has only been tested on Ubuntu 16.04. Please comment any issues under other platforms. Thanks!*
 ## Table Of Contents
-+ [Requirements](#Requirements)
-+ [Installation](#Installation)
-+ [Personalizing The Conversation Api](#Personalizing-The-Conversation-Api)
-+ [Starting Your Assistant](#Starting-Your-Assistant)
++ [Requirements](#requirements)
++ [Installation](#installation)
++ [Personalizing The Conversation Api](#personalizing-the-conversation-api)
++ [Starting Your Assistant](#starting-your-assistant)
 ## Requirements
 + [Bluemix account](https://console.ng.bluemix.net/registration/)
 + [CLI](https://github.com/cloudfoundry/cli#downloads)
