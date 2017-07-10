@@ -41,7 +41,7 @@ app.use('/bootstrap', express.static(__dirname + '/client/bower_components/boots
 
 //Schema for mongodb
 var conversationSchema = new mongoose.Schema({
-  // _id : Number, // check how mongoose handles id
+  _id : String, // check how mongoose handles id
   convos:[
     {
       el: String
@@ -100,7 +100,7 @@ app.post('/api/answer', function(req, res){
             console.log('\n', '\n');
             console.log('Storing first question:');
             conversation = new conversationModel({
-              // _id : id,
+              _id : id,
               convos:[
                 {
                   el: msg.text
@@ -111,6 +111,7 @@ app.post('/api/answer', function(req, res){
             convo_id = conversation._id
             console.log(id2);
             console.log(conversation.convos[0].el);
+
             // conversation.update({_id : id}, {'$set': {
             //   'convos.$.el' : msg.text }}, (err, result) => {
             //     if(err){
@@ -129,8 +130,10 @@ app.post('/api/answer', function(req, res){
               el: msg.text
             };
             console.log('what is being added:', convo_instance)
-            conversation.update({ '_id': convo_id}, {'$push':{
-              'convos' : convo_instance }},
+            conversation.convos.push(convo_instance);
+            conversation.save(
+            // conversation.update({ _id : convo_id}, {$push: {
+            //   convos : convo_instance }},
               function(err, result){
                 if(err){
                   console.log('error from mongoose')
