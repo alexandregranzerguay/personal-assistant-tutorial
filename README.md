@@ -7,7 +7,7 @@ Today you will learn how to create your own personal assistant using Node.js as 
 + [Requirements](#Requirements)
 + [Installation](#Installation)
 + [Personalizing The Conversation Api](#Personalizing-The-Conversation-Api)
-+ [Requirements](#Starting-Your-Assistant)
++ [Starting Your Assistant](#Starting-Your-Assistant)
 ## Requirements
 + [Bluemix account](https://console.ng.bluemix.net/registration/)
 + [CLI](https://github.com/cloudfoundry/cli#downloads)
