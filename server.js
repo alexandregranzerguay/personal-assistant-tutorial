@@ -83,6 +83,7 @@ app.post('/api/answer', function(req, res){
     };
     conversationWatson.message({ input: msg , context: context}, function(err, response){
       if (err) {
+        console.log('Error from watson')
         console.log(msg)
         console.log('error:', err)
       }
@@ -106,7 +107,10 @@ app.post('/api/answer', function(req, res){
                 }
               ]
             });
-            console.log(conversation.convos[0]._id);
+            id2 = conversation.convos[0]._id
+            convo_id = conversation._id
+            console.log(id2);
+            console.log(conversation.convos[0].el);
             // conversation.update({_id : id}, {'$set': {
             //   'convos.$.el' : msg.text }}, (err, result) => {
             //     if(err){
@@ -118,14 +122,23 @@ app.post('/api/answer', function(req, res){
             // );
           } else{
             // Add user question to conversation db
+            console.log('conversation id:', convo_id);
             console.log('\n', '\n');
             console.log('Storing question:');
-            conversation.update({'convos._id': id}, {'$push':{
-              'convos.$.el' : msg.text }}, (err, result) => {
+            var convo_instance = {
+              el: msg.text
+            };
+            console.log('what is being added:', convo_instance)
+            conversation.update({ '_id': convo_id}, {'$push':{
+              'convos' : convo_instance }},
+              function(err, result){
                 if(err){
+                  console.log('error from mongoose')
                   console.log(err);
                 } else {
+                  console.log('message to be stored:', msg.text)
                   console.log(result);
+                  console.log(conversation);
                 }
               }
             );
