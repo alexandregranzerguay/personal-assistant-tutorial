@@ -7,11 +7,22 @@
 </head>
   <body>
 
-    <div class="container" ng-controller="mikaController">
+    <div class="container" ng-controller="mikaController as myConvo">
 
         <div id="chat">
+          <!-- <div>
+            <div ng-repeat="element in myConvo.convoList" class="row">
+              <div class="col-sm-12">
+                <div class="{{element.sender}}">{{element.text}}</div>
+              </div>
+            </div>
+          </div> -->
           <div>
-            <p>{{mika}}</p>
+            <div ng-repeat="element in myConvo.convoList" class="row">
+              <div class="col-sm-12">
+                <div class="{{element.sender}}">{{element.text}}</div>
+              </div>
+            </div>
           </div>
 
 

@@ -10,13 +10,30 @@
  border-color:#cccccc;
 }
 
+.mika {
+  float: left;
+  background-color: #ededed;
+  text-align: left;
+  padding: 10px;
+}
 
+.user {
+  float: right;
+  background-color: #609af7;
+  text-align: left;
+  color: white;
+  padding: 10px;
+}
 
-  .container {
-    padding: 20px;
+.container {
+  padding: 20px;
+}
 
-
-  }
+.row {
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 
 body {
   background-color: #64676b;
@@ -36,7 +53,7 @@ body {
   width: 500px;
   margin: auto;
   padding-bottom: 0px;
-  background-color: #f2f4f7;
+  background-color: white;
 
 }
 
